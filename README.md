@@ -303,7 +303,7 @@ trait RideRepository[F[_]] {
   def completeRide(rideID: Ride.ID): F[CompleteRideReply]  
 }
 ```
-Note how we have made it verykept it simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose reply types into some other types, typically distinguishing error from success more clearly with e.g. an `Either`.  
+Note how we have kept it simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose reply types into some other types, typically distinguishing error from success more clearly with e.g. an `Either`.  
 The implementation of this trait will make use of commands and replies and the Akka mappings, as we'll see next. 
 
 ### DDD :heart: actor model
@@ -317,5 +317,5 @@ It follows from this separation of concerns and abstraction that entity business
 ## Implementation with Akka Persistence Typed    
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI2OTQwMjY4Ml19
+eyJoaXN0b3J5IjpbLTE4NjU1NDI5ODJdfQ==
 -->
