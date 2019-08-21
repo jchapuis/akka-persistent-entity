@@ -1,9 +1,10 @@
-package entity
+package entity.akka
 
 import akka.actor.typed.ActorSystem
 import akka.cluster.sharding.typed.scaladsl.{ClusterSharding, Entity}
 import akka.util.Timeout
-import entity.PersistentEntity.CommandExpectingReply
+import entity.EntityCommand
+import entity.akka.PersistentEntity.CommandExpectingReply
 
 import scala.concurrent.Future
 import scala.language.higherKinds

@@ -1,10 +1,12 @@
-package entity
+package entity.akka
 
 import akka.actor.typed.ActorRef
-import akka.cluster.sharding.typed.scaladsl.{ EntityTypeKey, EventSourcedEntity }
+import akka.cluster.sharding.typed.scaladsl.{EntityTypeKey, EventSourcedEntity}
 import akka.persistence.typed.ExpectingReply
-import akka.persistence.typed.scaladsl.{ Effect, EffectBuilder, EventSourcedBehavior, ReplyEffect }
-import PersistentEntity.CommandExpectingReply
+import akka.persistence.typed.scaladsl.{Effect, EffectBuilder, EventSourcedBehavior, ReplyEffect}
+import entity._
+import entity.akka.PersistentEntity.CommandExpectingReply
+
 import scala.language.higherKinds
 
 abstract class PersistentEntity[ID, InnerState, C[R] <: EntityCommand[ID, InnerState, R], E <: EntityEvent[ID]](
