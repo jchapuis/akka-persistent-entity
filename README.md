@@ -453,29 +453,33 @@ Type parameters are:
  - `ID`: entity id
  - `S`: entity state
  - `C`: entity command top type
- - `Entity`: the concrete implementation 
+ - `Entity`: the concrete persistent entity class
 
+The complete trait is given below:
 ```scala
-trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {  
-  implicit def sharding: ClusterSharding  
-  implicit def actorSystem: ActorSystem[_]  
-  implicit def askTimeout: Timeout  
-  def persistentEntity: Entity  
-  
-  sharding.init(  
-  Entity(  
-  persistentEntity.entityTypeKey,  
-  context => persistentEntity.eventSourcedEntity(context.entityId)  
- ) )  
-  private def entityFor(id: ID) =  
-  sharding.entityRefFor(persistentEntity.entityTypeKey, persistentEntity.entityIDToString(id))  
-  
-  def sendCommand[R](command: C[R]): Future[R] =  
-  entityFor(command.entityID) ? CommandExpectingReply(command)  
+trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {
+  implicit def sharding: ClusterSharding
+  implicit def actorSystem: ActorSystem[_]
+  implicit def askTimeout: Timeout
+  def persistentEntity: Entity
+
+  sharding.init(
+    Entity(
+      persistentEntity.entityTypeKey,
+      context => persistentEntity.eventSourcedEntity(context.entityId)
+    )
+  )
+
+  private def entityFor(id: ID) =
+    sharding.entityRefFor(persistentEntity.entityTypeKey, persistentEntity.entityIDToString(id))
+
+  def sendCommand[R](command: C[R]): Future[R] =
+    entityFor(command.entityID) ? CommandExpectingReply(command)
 }
 ```
+T
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcxMTk0NTA1Myw0MTg2MzUwODMsLTk5OT
-Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbMzI3NTYyNjM1LDQxODYzNTA4MywtOTk5ND
+c3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgyXX0=
 -->
