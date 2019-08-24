@@ -449,7 +449,11 @@ As mentioned earlier, the repository is implemented by sending commands an decod
 ```scala
 trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]]
 ```
-
+Type parameters are:
+ - `ID`: entity id
+ - `S`: entity state
+ - `C`: entity command top type
+ - `Entity`: the concrete implementation 
 
 ```scala
 trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {  
@@ -472,6 +476,6 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
 ```
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI5ODg1NTk1OCw0MTg2MzUwODMsLTk5OT
+eyJoaXN0b3J5IjpbLTcxMTk0NTA1Myw0MTg2MzUwODMsLTk5OT
 Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
