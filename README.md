@@ -470,11 +470,11 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
     )
   )
 
-  private def entityFor(id: ID) =
-    sharding.entityRefFor(persistentEntity.entityTypeKey, persistentEntity.entityIDToString(id))
-
   def sendCommand[R](command: C[R]): Future[R] =
     entityFor(command.entityID) ? CommandExpectingReply(command)
+    
+  private def entityFor(id: ID) =
+    sharding.entityRefFor(persistentEntity.entityTypeKey, persistentEntity.entityIDToString(id))
 }
 ```
 #### TypedRideEntityRepository
@@ -502,7 +502,7 @@ class TypedActorRideRepository()(
 This concludes our implementation tour, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwMDcwMDM2NzIsLTUxODAyODQ4MSwtND
-U3OTU3NDE2LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1
-LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
+c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
+LTE4NjU1NDI5ODJdfQ==
 -->
