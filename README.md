@@ -478,7 +478,7 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
 }
 ```
 #### TypedRideEntityRepository
-Implementation of this trait for `Ride` is where instantiation of `RidePersistentEntity` happens, and gives us our functional repository!
+Implementation of this trait for `Ride` is where instantiation of `RidePersistentEntity` happens. Implementation of repository methods is simply about sending the relevant command:
 
 ```scala
 class TypedActorRideRepository()(
@@ -499,9 +499,10 @@ class TypedActorRideRepository()(
   def completeRide(rideID: ID): Future[RideCommand.CompleteRideReply] = sendCommand(CompleteRide(rideID))
 }
 ```
+With this
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ0NDYzOTQzMCwtNDU3OTU3NDE2LDQxOD
-YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
-XX0=
+eyJoaXN0b3J5IjpbMTg5MzcyMTA2LC00NTc5NTc0MTYsNDE4Nj
+M1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJd
+fQ==
 -->
