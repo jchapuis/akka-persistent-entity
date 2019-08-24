@@ -445,9 +445,33 @@ The only significant logic here is additional persistent behaviour configuration
  - persistence failure strategy:
 
 ###  TypedActorEntityRepository
-As mentioned earlier, the repository is implemented by sending commands an decoding replies.
+As mentioned earlier, the repository is implemented by sending commands an decoding replies. Here's the trait definition:
+```scala
+trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]]
+```
+
+
+```scala
+trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {  
+  implicit def sharding: ClusterSharding  
+  implicit def actorSystem: ActorSystem[_]  
+  implicit def askTimeout: Timeout  
+  def persistentEntity: Entity  
+  
+  sharding.init(  
+  Entity(  
+  persistentEntity.entityTypeKey,  
+  context => persistentEntity.eventSourcedEntity(context.entityId)  
+ ) )  
+  private def entityFor(id: ID) =  
+  sharding.entityRefFor(persistentEntity.entityTypeKey, persistentEntity.entityIDToString(id))  
+  
+  def sendCommand[R](command: C[R]): Future[R] =  
+  entityFor(command.entityID) ? CommandExpectingReply(command)  
+}
+```
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODg5MzY2NDcsNDE4NjM1MDgzLC05OTk0Nz
-c3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbLTI5ODg1NTk1OCw0MTg2MzUwODMsLTk5OT
+Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
