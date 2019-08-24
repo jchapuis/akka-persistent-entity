@@ -455,7 +455,7 @@ Type parameters are:
  - `C`: entity command top type
  - `Entity`: the concrete persistent entity class
 
-The repository trait takes care of initializing sharding with the persistent entity behavior. It requires definition of the persistentEntity instance, and exposes a def for sending commands:
+The repository trait takes care of initializing sharding with the persistent entity behavior. It requires definition of the `PersistentEntity` instance, and exposes a def for looking up entities for a certain ID and sending them commands:
 ```scala
 trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {
   implicit def sharding: ClusterSharding
@@ -502,7 +502,7 @@ class TypedActorRideRepository()(
 This concludes our implementation tour, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
-YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
-XX0=
+eyJoaXN0b3J5IjpbLTIwMDcwMDM2NzIsLTUxODAyODQ4MSwtND
+U3OTU3NDE2LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1
+LC0xODY1NTQyOTgyXX0=
 -->
