@@ -442,7 +442,7 @@ object RidePersistentEntity {
 }
 ```
 Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only significant logic here is additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of all the available tweaking options, e.g. [installing an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
+The only significant logic here is additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of available tweaking options, e.g. [install an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
 
 ###  TypedActorEntityRepository
 As mentioned earlier, the repository is implemented by sending commands an decoding replies. Here's the trait definition:
@@ -499,11 +499,11 @@ class TypedActorRideRepository()(
   def completeRide(rideID: ID): Future[RideCommand.CompleteRideReply] = sendCommand(CompleteRide(rideID))
 }
 ```
-This concludes our implementation tour, we now have a fully functional repository for rides!
+This concludes our implementation tour. Journal and event adapter configuration aside, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg4NDY0NDQzOSw2MzI1NDIwNSwtMzkwNT
-UwNTAyLDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2
-LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NT
-QyOTgyXX0=
+eyJoaXN0b3J5IjpbNDgyNDQ0NDIsNjMyNTQyMDUsLTM5MDU1MD
+UwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nzk1NzQxNiw0
+MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mj
+k4Ml19
 -->
