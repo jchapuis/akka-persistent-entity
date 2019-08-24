@@ -436,9 +436,10 @@ object RidePersistentEntity {
   ): RidePersistentEntity = new RidePersistentEntity
 }
 ```
-Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are taken automatically from `Ride` compan 
+Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are taken automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
+The only logic here is in additional persistent behaviour configuration, i.e.: 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMzNDk0ODQxMiwtOTk5NDc3NzMsNDg0Nz
+eyJoaXN0b3J5IjpbMTA1NDY3MzU3NiwtOTk5NDc3NzMsNDg0Nz
 k5MzQ1LC0xODY1NTQyOTgyXX0=
 -->
