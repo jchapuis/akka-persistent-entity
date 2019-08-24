@@ -437,9 +437,15 @@ object RidePersistentEntity {
 }
 ```
 Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are taken automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only logic here is in additional persistent behaviour configuration, i.e.: 
+The only logic here is in additional persistent behaviour configuration, i.e.:
+ - event adapter:
+ - tagger:
+ - signal handling:
+ - persistence failure strategy:
+
+###  
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA1NDY3MzU3NiwtOTk5NDc3NzMsNDg0Nz
-k5MzQ1LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OT
+kzNDUsLTE4NjU1NDI5ODJdfQ==
 -->
