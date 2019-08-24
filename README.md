@@ -478,10 +478,30 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
 }
 ```
 #### TypedRideEntityRepository
-Implementation of this trait for `Ride` brings everything together and gives us our akka
+Implementation of this trait for `Ride` is where instantiation of `RidePersistentEntity` happens, and gives us our functional repository!
+
+```scala
+class TypedActorRideRepository()(
+  implicit val sharding: ClusterSharding,
+  val actorSystem: ActorSystem[_],
+  val askTimeout: Timeout,
+  timestampProvider: TimestampProvider
+) extends TypedActorEntityRepository[ID, Ride, RideCommand, RidePersistentEntity]
+  with RideRepository[Future] {
+  implicit val executionContext: ExecutionContext = actorSystem.executionContext
+  lazy val persistentEntity                       = RidePersistentEntity()
+
+  def bookRide(rideID: ID, origin: Address, destination: Address, pickupTime: Instant): Future[RideCommand.BookReply] =
+    sendCommand(BookRide(rideID, origin, destination, pickupTime))
+  def assignVehicle(rideID: ID, vehicle: ID): Future[RideCommand.AssignVehicleReply] =
+    sendCommand(AssignVehicle(rideID, vehicle))
+  def startRide(rideID: ID): Future[RideCommand.StartRideReply] = sendCommand(StartRide(rideID))
+  def completeRide(rideID: ID): Future[RideCommand.CompleteRideReply] = sendCommand(CompleteRide(rideID))
+}
+```
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNDQzOTAzMjcsLTQ1Nzk1NzQxNiw0MT
-g2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4
-Ml19
+eyJoaXN0b3J5IjpbMTQ0NDYzOTQzMCwtNDU3OTU3NDE2LDQxOD
+YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
+XX0=
 -->
