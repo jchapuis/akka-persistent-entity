@@ -436,9 +436,9 @@ object RidePersistentEntity {
   ): RidePersistentEntity = new RidePersistentEntity
 }
 ```
-
+Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are taken automatically from `Ride` compan 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA1OTY1Mzc1MiwtOTk5NDc3NzMsNDg0Nz
+eyJoaXN0b3J5IjpbMTMzNDk0ODQxMiwtOTk5NDc3NzMsNDg0Nz
 k5MzQ1LC0xODY1NTQyOTgyXX0=
 -->
