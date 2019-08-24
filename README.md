@@ -401,7 +401,7 @@ object PersistentEntity {
 ```  
 Notice how we left `protected  def configureEntityBehavior()` open for extension, this allows refining the persistence behaviour in subclasses.
 
-### RidePersistentEntity
+#### RidePersistentEntity
 
 Definition of a persistent entity behaviour is now easily done by extending `PersistentEntity`. This is were everything comes together:
 ```scala
@@ -455,7 +455,7 @@ Type parameters are:
  - `C`: entity command top type
  - `Entity`: the concrete persistent entity class
 
-The repository trait takes care of initializing sharding for the persistent entity behavior. It requires definition of the persistentEntity instance, and exposes a def for sending commands:
+The repository trait takes care of initializing sharding with the persistent entity behavior. It requires definition of the persistentEntity instance, and exposes a def for sending commands:
 ```scala
 trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {
   implicit def sharding: ClusterSharding
@@ -477,9 +477,11 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
     entityFor(command.entityID) ? CommandExpectingReply(command)
 }
 ```
-###  TypedActorEntityRepository
+#### TypedRideEntityRepository
+Implementation of this trait for `Ride` brings everything together and gives us our akka
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OT
-Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTExNDQzOTAzMjcsLTQ1Nzk1NzQxNiw0MT
+g2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4
+Ml19
 -->
