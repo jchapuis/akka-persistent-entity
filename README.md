@@ -1,5 +1,5 @@
 
-# Separating Domain-driven event sourcing with Akka Typed
+# Pure DDD event sourcing with Akka Typed
 ![enter image description here](https://mdaltd.ca/wp-content/uploads/2017/08/Abrasive-Wear-300x225.jpg)
 When following a domain-driven design approach, it is considered good practice to have the domain code at the core of the application, self-contained and with no dependencies on platform-specific aspects ([onion](https://www.infoq.com/news/2014/10/ddd-onion-architecture/) architecture). Domain code is as business-centric as possible, maximising the ratio of business logic versus "plumbing" code. This makes business logic very expressive, and resilient to changes.
 
@@ -506,8 +506,8 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTEzNzk4MDUsLTQzMzQ3NzEzNCw2MzI1ND
-IwNSwtMzkwNTUwNTAyLDE0MTEyMTUyMjAsLTUxODAyODQ4MSwt
-NDU3OTU3NDE2LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5Mz
-Q1LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbMTk1NzQzMzY3OCwtNDMzNDc3MTM0LDYzMj
+U0MjA1LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgx
+LC00NTc5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OT
+kzNDUsLTE4NjU1NDI5ODJdfQ==
 -->
