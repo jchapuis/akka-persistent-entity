@@ -499,10 +499,10 @@ class TypedActorRideRepository()(
   def completeRide(rideID: ID): Future[RideCommand.CompleteRideReply] = sendCommand(CompleteRide(rideID))
 }
 ```
-With this
+This concludes our implementation tour, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg5MzcyMTA2LC00NTc5NTc0MTYsNDE4Nj
-M1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJd
-fQ==
+eyJoaXN0b3J5IjpbLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
+YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
+XX0=
 -->
