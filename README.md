@@ -402,7 +402,9 @@ Notice how we left `protected  def configureEntityBehavior()` open for extension
 
 ### RidePersistentEntity
 
+
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDg0Nzk5MzQ1LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NT
+U0Mjk4Ml19
 -->
