@@ -438,11 +438,7 @@ object RidePersistentEntity {
 }
 ```
 Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only significant logic here is additional persistent behaviour configuration:
- - event adapter:
- - tagger:
- - signal handling:
- - persistence failure strategy:
+The only significant logic here is additional persistent behaviour configuration. This is where you would hook up you event adapter, tagger, etc. and all the other options available with the persistent behavior dsl
 
 ###  TypedActorEntityRepository
 As mentioned earlier, the repository is implemented by sending commands an decoding replies. Here's the trait definition:
@@ -502,7 +498,7 @@ class TypedActorRideRepository()(
 This concludes our implementation tour, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
-c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
-LTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbLTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MT
+gwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OTQ3Nzcz
+LDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
