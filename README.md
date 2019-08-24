@@ -455,7 +455,7 @@ Type parameters are:
  - `C`: entity command top type
  - `Entity`: the concrete persistent entity class
 
-The repository trait takes care of initializing sharding for the persistent entity behavior. It exposes   is given below:
+The repository trait takes care of initializing sharding for the persistent entity behavior. It requires definition of the persistentEntity instance, and exposes a def for sending commands:
 ```scala
 trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity <: PersistentEntity[ID, S, C, _]] {
   implicit def sharding: ClusterSharding
@@ -477,9 +477,9 @@ trait TypedActorEntityRepository[ID, S, C[R] <: EntityCommand[ID, S, R], Entity 
     entityFor(command.entityID) ? CommandExpectingReply(command)
 }
 ```
-
+###  TypedActorEntityRepository
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTgwODQ2NDk5LDQxODYzNTA4MywtOTk5ND
-c3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OT
+Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
