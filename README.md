@@ -398,13 +398,14 @@ object PersistentEntity {
   }
 }
 ```  
-Notice how we left `protected  def configureEntityBehavior()` open for extension, this allows refining the persistence behavior in subclasses.
+Notice how we left `protected  def configureEntityBehavior()` open for extension, this allows refining the persistence behaviour in subclasses.
 
 ### RidePersistentEntity
 
+Definition of a persistent entity behaviour is 
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NT
-U0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTc0OTg4MzYxNiwtOTk5NDc3NzMsNDg0Nz
+k5MzQ1LC0xODY1NTQyOTgyXX0=
 -->
