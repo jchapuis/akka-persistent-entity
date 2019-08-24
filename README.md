@@ -306,8 +306,6 @@ trait RideRepository[F[_]] {
 Note how we have made it very simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose command reply types into some other types, typically distinguishing error from success more clearly with `Either`.  
 The implementation of this trait will make use of commands and replies together with the Akka mappings, as we'll see next. 
 
-### DDD :heart: actor model
-Although very simplified, this example illustrates the "good fit" of the actor model to domain-driven-design: aggregates are represented by entities with well defined sequential state transitions and a command and event "language" to represent actions and facts.
 ### Testing
 It follows from this abstraction and separation of concerns that entity business logic requires minimal test setup, and distinct behavioural aspects can be covered in isolation:
  - command replies according to command parameters and entity states
@@ -500,10 +498,15 @@ class TypedActorRideRepository()(
 }
 ```
 This concludes our implementation tour. Journal and event adapter configuration aside, we now have a fully functional repository for rides!
+
+## DDD :heart: actor model
+Although very simplified, this example illustrates the "good fit" of the actor model to domain-driven-design: aggregates are represented by entities with well defined sequential state transitions and a command and event "language" to represent actions and facts.
+We have shown how to describe event sourced entities in the domain 
+
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDgyNDQ0NDIsNjMyNTQyMDUsLTM5MDU1MD
-UwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nzk1NzQxNiw0
-MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mj
-k4Ml19
+eyJoaXN0b3J5IjpbLTEzNTM0MTA5NzAsNjMyNTQyMDUsLTM5MD
+U1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nzk1NzQx
+Niw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NT
+U0Mjk4Ml19
 -->
