@@ -317,6 +317,7 @@ It follows from this abstraction and separation of concerns that entity business
 ## Implementation with Akka Persistence Typed
 Let's take a plunge now and dive into the *infrastructure* layer. This is where we'll wire our abstractions with Akka. Thanks to the expressiveness of Akka Persistence Typed API, this mapping is surprisingly short, albeit a bit complicated on the typing side.     
 
+### PersistentEntit
 The bulk of the code is in an abstract `PersistentEntity` class, which exposes a `eventSourcedEntity(id: String): EventSourcedBehavior` public function which will be used by the repository implementation. This class is typed like so:
 ```scala
 abstract class PersistentEntity[ID, InnerState, C[R] <: EntityCommand[ID, InnerState, R], E <: EntityEvent[ID]]
@@ -436,8 +437,8 @@ object RidePersistentEntity {
   ): RidePersistentEntity = new RidePersistentEntity
 }
 ```
-Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are taken automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only logic here is in additional persistent behaviour configuration, i.e.:
+Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
+The only significant logic here is additional persistent behaviour configuration:
  - event adapter:
  - tagger:
  - signal handling:
@@ -446,6 +447,6 @@ The only logic here is in additional persistent behaviour configuration, i.e.:
 ###  
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OT
-kzNDUsLTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbLTIxMjc3NTY4NzMsNDE4NjM1MDgzLC05OT
+k0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJdfQ==
 -->
