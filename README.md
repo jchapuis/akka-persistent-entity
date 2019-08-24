@@ -402,10 +402,42 @@ Notice how we left `protected  def configureEntityBehavior()` open for extension
 
 ### RidePersistentEntity
 
-Definition of a persistent entity behaviour is 
+Definition of a persistent entity behaviour is now easily done by extending `PersistentEntity`. This is were everything comes together:
+```scala
+sealed class RidePersistentEntity()(implicit timestampProvider: TimestampProvider)  
+  extends PersistentEntity[Ride.ID, Ride, RideCommand, RideEvent]("ride") {  
+  def entityIDFromString(id: String): Ride.ID = UUID.fromString(id)  
+  def entityIDToString(id: Ride.ID): String = id.toString  
+  
+  override def configureEntityBehavior(  
+  id: Ride.ID,  
+  behavior: EventSourcedBehavior[Command, RideEvent, OuterState]  
+ ): EventSourcedBehavior[Command, RideEvent, OuterState] =  
+  behavior  
+  .eventAdapter(TransformerBasedEventAdapter[RideEvent, proto.RideEvent]())  
+ .withTagger(_ => Set(entityName))  
+ .receiveSignal {  
+  case (Initialized(state), RecoveryCompleted) =>  
+  Logger.info(s"Successful recovery of ride entity $id in state $state")  
+  case (Uninitialized(_), _) =>  
+  Logger.info(s"Ride entity $id created in uninitialized state")  
+  case (state, RecoveryFailed(error)) =>  
+  Logger.error(s"Failed recovery of ride entity $id in state $state: $error")  
+ } .onPersistFailure(  
+  serviceConfig.persistence.restart.toSupervisorStrategy  
+      )  
+}  
+  
+object RidePersistentEntity {  
+  def apply()(  
+  implicit  
+  timestampProvider: TimestampProvider  
+  ): RidePersistentEntity = new RidePersistentEntity  
+}
+```
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc0OTg4MzYxNiwtOTk5NDc3NzMsNDg0Nz
-k5MzQ1LC0xODY1NTQyOTgyXX0=
+eyJoaXN0b3J5IjpbLTEzODQ2NDA4MTIsLTk5OTQ3NzczLDQ4ND
+c5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
