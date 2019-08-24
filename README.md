@@ -415,8 +415,6 @@ sealed class RidePersistentEntity()(implicit timestampProvider: TimestampProvide
     behavior: EventSourcedBehavior[Command, RideEvent, OuterState]
   ): EventSourcedBehavior[Command, RideEvent, OuterState] =
     behavior
-      .eventAdapter(TransformerBasedEventAdapter[RideEvent, proto.RideEvent]())
-      .withTagger(_ => Set(entityName))
       .receiveSignal {
         case (Initialized(state), RecoveryCompleted) =>
           Logger.info(s"Successful recovery of ride entity $id in state $state")
@@ -426,7 +424,13 @@ sealed class RidePersistentEntity()(implicit timestampProvider: TimestampProvide
           Logger.error(s"Failed recovery of ride entity $id in state $state: $error")
       }
       .onPersistFailure(
-        serviceConfig.persistence.restart.toSupervisorStrategy
+        SupervisorStrategy
+          .restartWithBackoff(
+            minBackoff =10 seconds,
+            maxBackoff = 60 seconds,
+            randomFactor = 0.1
+          )
+          .withMaxRestarts(5)
       )
 }
 
@@ -438,7 +442,7 @@ object RidePersistentEntity {
 }
 ```
 Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only significant logic here is additional persistent behaviour configuration. This is where you can [install an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define tags, or any other tweaking of the behavior.
+The only significant logic here is additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of all the available tweaking options, e.g. [installing an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
 
 ###  TypedActorEntityRepository
 As mentioned earlier, the repository is implemented by sending commands an decoding replies. Here's the trait definition:
@@ -498,7 +502,8 @@ class TypedActorRideRepository()(
 This concludes our implementation tour, we now have a fully functional repository for rides!
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjMyNTQyMDUsLTM5MDU1MDUwMiwxNDExMj
-E1MjIwLC01MTgwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMs
-LTk5OTQ3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTg4NDY0NDQzOSw2MzI1NDIwNSwtMzkwNT
+UwNTAyLDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2
+LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NT
+QyOTgyXX0=
 -->
