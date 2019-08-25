@@ -1,5 +1,6 @@
 package entity
 
 object Logger {
-  def logError(text: String): Unit = println(text)
+  def error(text: String): Unit = println(text)
+  def info(text: String): Unit = println(text)
 }

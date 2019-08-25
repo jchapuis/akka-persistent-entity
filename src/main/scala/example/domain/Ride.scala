@@ -3,7 +3,7 @@ package example.domain
 import java.time.Instant
 import java.util.UUID
 
-import entity.Logger._
+import entity.Logger
 import entity._
 import example.domain.RideCommand._
 import example.domain.RideEvent._
@@ -31,7 +31,7 @@ object Ride {
     case BookRide(rideID, origin, destination, pickupTime) =>
       List(RideBooked(rideID, timestampProvider.timestamp, origin, destination, pickupTime))
     case otherCommand =>
-      logError(s"Received erroneous initial command $otherCommand for entity")
+      Logger.error(s"Received erroneous initial command $otherCommand for entity")
       Nil
   }
 
@@ -39,7 +39,7 @@ object Ride {
     case RideBooked(rideID, _, origin, destination, pickupTime) =>
       Some(domain.Ride(rideID, origin, destination, pickupTime, vehicle = None, status = Pending))
     case otherEvent =>
-      logError(s"Received ride event $otherEvent before actual ride booking")
+      Logger.error(s"Received ride event $otherEvent before actual ride booking")
       None
   }
 
