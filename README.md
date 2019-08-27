@@ -295,11 +295,11 @@ trait RideRepository[F[_]] {
   def completeRide(rideID: Ride.ID): F[CompleteRideReply]  
 }
 ```
-We have kept this exe have made it very simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose command reply types into some other types, typically distinguishing error from success more clearly with `Either`.  
+We have kept this example very simple and directly transposed our command "language" into a set of functions, and kept the reply types. In a real case, we would typically transpose command reply types into some other types, typically distinguishing error from success more clearly with `Either`.  
  
 
 ### Testing
-It follows from this abstraction and separation of concerns that entity business logic requires minimal test setup, and distinct behavioural aspects can be covered in isolation:
+Thanks to abstraction and separation of concerns, our command business logic requires minimal test setup, and distinct behavioural aspects can be covered in isolation:
  - command replies according to command parameters and entity states
  - generated events according to entity state and commands
  - resulting entity states from stimulating event applier with events 
@@ -509,9 +509,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUyMTAzMzI3OCwxNjM4MTMxMzAzLDE0Mz
-c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
-LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
-c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
-LTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbNzY5MDE0NDM0LDE2MzgxMzEzMDMsMTQzNz
+Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
+LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
+k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
+MTg2NTU0Mjk4Ml19
 -->
