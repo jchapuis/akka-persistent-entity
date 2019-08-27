@@ -12,7 +12,7 @@ Much of the code presented here is inspired by this excellent [article](https://
 
 ## Commands, events and state
 
-As mentioned above, event sourcing revolves around three main [concepts](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/jj591559%28v=pandp.10%29) which allow describing operations for any domain, with an emphasis on evolution:
+As mentioned above, event sourcing revolves around three main [concepts](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/jj591559%28v=pandp.10%29) which allow describing operations for any domain with an emphasis on evolution:
 
 - **Command**:  commands are "agents of change" in the system, and represent  concrete business actions (e.g. create a booking). Commands entail a reply to the emitter, as well generation of one or several events. 
 - **Event**: events are the result of commands, and always describe a past occurence (e.g. booking was accepted). Once generated, the event never disappears nor changes.
@@ -506,8 +506,8 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MDg3MzIwOTcsMTQxMDU4NjEwMywtND
-MzNDc3MTM0LDYzMjU0MjA1LC0zOTA1NTA1MDIsMTQxMTIxNTIy
-MCwtNTE4MDI4NDgxLC00NTc5NTc0MTYsNDE4NjM1MDgzLC05OT
-k0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbMTQzNzQ0OTA0OSwxNDEwNTg2MTAzLC00Mz
+M0NzcxMzQsNjMyNTQyMDUsLTM5MDU1MDUwMiwxNDExMjE1MjIw
+LC01MTgwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OT
+Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
