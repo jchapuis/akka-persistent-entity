@@ -299,7 +299,7 @@ We have kept this example very simple and directly transposed our command "langu
  
 
 ### Testing
-Thanks to abstraction and separation of concerns, our command business logic requires minimal test setup, and distinct behavioural aspects can be covered in isolation:
+Thanks to abstraction and separation of concerns, our commands and events logic requires minimal test setup and the distinct behavioural aspects can be covered in isolation:
  - command replies according to command parameters and entity states
  - generated events according to entity state and commands
  - resulting entity states from stimulating event applier with events 
@@ -308,7 +308,7 @@ Thanks to abstraction and separation of concerns, our command business logic req
 Let's take a plunge now and dive into the *infrastructure* layer. This is where we'll wire our abstractions with Akka. Thanks to the expressiveness of Akka Persistence Typed API, this mapping is surprisingly short, albeit a bit complicated on the typing side.     
 
 ### PersistentEntity
-The bulk of the code is in an abstract `PersistentEntity` class, which exposes a `eventSourcedEntity(id: String): EventSourcedBehavior` public function which will be used by the repository implementation. This class is typed like so:
+The bulk of the code is in an abstract `PersistentEntity` class, which exposes a `eventSourcedEntity(id: String): EventSourcedBehavior` public function. This will be used by the repository implementation. This class is typed like so:
 ```scala
 abstract class PersistentEntity[ID, InnerState, C[R] <: EntityCommand[ID, InnerState, R], E <: EntityEvent[ID]]
 ```
@@ -509,7 +509,7 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzY5MDE0NDM0LDE2MzgxMzEzMDMsMTQzNz
+eyJoaXN0b3J5IjpbNzcwNTI2NzE5LDE2MzgxMzEzMDMsMTQzNz
 Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
 LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
 k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
