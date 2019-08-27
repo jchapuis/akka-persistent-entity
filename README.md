@@ -193,7 +193,7 @@ object Ride {
 ```
 
 #### AssignVehicle command
-Once the booking is created, we need to select a vehicle to service the ride. For the sake of simplicity in this article we're not delving into details, but one can imagine a sophisticated algorithm which would select the optimal vehicle. This algorithm could be monitoring `RideBooked` events from the Akka event journal to launch an optimization asynchronously, and send a command back to the ride entity once a vehicle has been matched (note that event projections can also be abstracted in the domain, this could be the topic of a subsequent article).
+Once the booking is created, we need to select a vehicle to service the ride. For the sake of simplicity in this article we're not delving into details, but one can imagine a sophisticated algorithm which would select the optimal vehicle. This algorithm could be monitoring `RideBooked` events from the Akka event journal to launch an optimization asynchronously, and send a command to the ride entity once a vehicle has been matched (note that event projections can also be abstracted in the domain, this could be the topic of a subsequent article).
 Let's name this command `AssignVehicle`. Here's a simple definition for it:   
 
 ```scala
@@ -208,12 +208,12 @@ case object VehicleAssignmentReceived extends AssignVehicleReply
 case class VehicleAlreadyAssigned(vehicleID: Vehicle.ID) extends AssignVehicleReply  
 case class RideNotFound(rideID: Ride.ID) extends AssignVehicleReply
 ```
-Here's the corresponding event : 
+And the corresponding event : 
 
 ```scala
 case class VehicleAssigned(entityID: Ride.ID, timestamp: Instant, vehicleID: Vehicle.ID) extends RideEvent
 ```
-And command processor as well as event applier:
+Below the command processor as well as event applier, which simply sets the `vehicle` field:
 ```scala
 implicit def commandProcessor(  
   implicit timestampProvider: TimestampProvider  
@@ -266,7 +266,9 @@ case object AlreadyCompleted extends CompleteRideReply with StartRideReply
 case object NoVehicleAssigned extends StartRideReply with CompleteRideReply  
 case class RideNotFound(rideID: Ride.ID) extends AssignVehicleReply with StartRideReply with CompleteRideReply
 ```
-Notice above how we could recycle errors common to multiple commands by making them extend multiple reply types. Extension of command processor and event handler is equally trivial:
+Notice above how we could recycle errors common to multiple commands by making them extend multiple reply types.
+
+Extension of command processor and event handler is equally trivial:
 ```scala
 implicit def commandProcessor(  
   implicit timestampProvider: TimestampProvider  
@@ -284,7 +286,7 @@ implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>
 }
 ``` 
 ### Ride repository
-The concept of repository can be traditionally captured in the domain by a trait, nothing special here. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
+In Domain-drive  concept of repository can be traditionally captured in the domain by a trait, nothing special here. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
 ```scala
 trait RideRepository[F[_]] {  
   def bookRide(rideID: Ride.ID, origin: Address, destination: Address, pickupTime: Instant): F[BookReply]  
@@ -507,9 +509,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNTg3ODYzNCwxNjM4MTMxMzAzLDE0Mz
-c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
-LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
-c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
-LTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbNTg0MTM4MjU3LDE2MzgxMzEzMDMsMTQzNz
+Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
+LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
+k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
+MTg2NTU0Mjk4Ml19
 -->
