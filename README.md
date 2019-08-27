@@ -23,7 +23,7 @@ Let's go ahead and capture these concepts in Scala:
 ### Command
 A command is directed to a specific entity, and thus bears a target entity ID. Along with command data, it defines the reply to the command emitter. Formulating the reply needs to be quick so that the system stays responsive. Reply formulation typically consist in validation code leading to either acceptation or rejection of the command. 
 
-Two cases can arise when receiving a command: the entity already exists, or it's the first time we're getting a command for that ID. Purely introspective commands need to be supported in this model as well, allowing state inspection. For such read-only commands, the command typically doesn't entail any event and the reply consists of some element of current entity state.
+Two cases can arise when receiving a command: the entity already exists, or it's the first time we're getting a command for that ID. 
 
 Here's a trait for entity commands:    
 
@@ -506,9 +506,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzODA0MDM5LDE0Mzc0NDkwNDksMTQxMD
-U4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1LC0zOTA1NTA1MDIs
-MTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NTc5NTc0MTYsNDE4Nj
-M1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJd
-fQ==
+eyJoaXN0b3J5IjpbLTQ3MTY2Mjc3MywxNDM3NDQ5MDQ5LDE0MT
+A1ODYxMDMsLTQzMzQ3NzEzNCw2MzI1NDIwNSwtMzkwNTUwNTAy
+LDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
+YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
+XX0=
 -->
