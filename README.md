@@ -286,7 +286,7 @@ implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>
 }
 ``` 
 ### Ride repository
-In domain-driven design, a [repository](https://martinfowler.com/eaaCatalog/repository.html) is an abstraction for a collection of persistent entities. It is the entry point to access and manipulate entities of a certain type. We can capture this with a simple trait, whose implementation will make use of our commands and replies together with the Akka mappings, as we'll see next. This makes our ride operations easy to integrate in the rest of domain code, which doesn't have to deal directly with commands. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
+In domain-driven design, a [repository](https://martinfowler.com/eaaCatalog/repository.html) is an abstraction for a collection of persistent entities. It is the entry point to access and manipulate entities of a certain type. We can capture this with a simple trait, whose implementation will make use of our commands and replies together with the Akka mappings, as we'll see next. This makes our ride operations easy to integrate in the rest of domain code, since it won't have to deal directly with commands. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
 ```scala
 trait RideRepository[F[_]] {  
   def bookRide(rideID: Ride.ID, origin: Address, destination: Address, pickupTime: Instant): F[BookReply]  
@@ -295,7 +295,7 @@ trait RideRepository[F[_]] {
   def completeRide(rideID: Ride.ID): F[CompleteRideReply]  
 }
 ```
-Note how we have made it very simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose command reply types into some other types, typically distinguishing error from success more clearly with `Either`.  
+We have kept this exe have made it very simple here and directly transposed our command "language" into a set of functions, and kept the reply types. Such a repository trait is the entry point for the rest of domain code to send command and deal with replies. In a real case, we would typically transpose command reply types into some other types, typically distinguishing error from success more clearly with `Either`.  
  
 
 ### Testing
@@ -509,7 +509,7 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg5MzI0NTAwNSwxNjM4MTMxMzAzLDE0Mz
+eyJoaXN0b3J5IjpbMTUyMTAzMzI3OCwxNjM4MTMxMzAzLDE0Mz
 c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
 LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
 c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
