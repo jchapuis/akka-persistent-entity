@@ -21,7 +21,7 @@ As mentioned above, event sourcing revolves around three main [concepts](https:/
 Let's go ahead and capture these concepts in Scala:
 
 ### Command
-A command is directed to a specific entity, and thus bears a target entity ID. Along with command data, it defines the reply to the command emitter. Formulating the reply needs to be quick so that the system stays responsive. Reply formulation typically consist in validation code leading to either acceptation or rejection of the command. 
+A command is directed to a specific entity, and thus bears a target entity ID. Along with command data, it defines the reply to the command emitter. Formulating the reply needs to be quick so that the system stays responsive. Reply formulation typically consist in validation code leading to either acceptation or rejection of the command. Purely introspective commands need to be supported in this model as well, allowing for state inspection. For such read-only commands, the command typically doesn't entail any event and the reply consists of some element of current entity state.
 
 Two cases can arise when receiving a command: the entity already exists, or it's the first time we're getting a command for that ID. 
 
@@ -45,7 +45,7 @@ Along with the `entityID`, we define a function `initializedReply: S => R`  and 
 
 ### Event
 
-Commands generate events by means of a *command processor* (see below). As is the case with commands, events reference a certain entity and thus bear an entity identifier. We also include a timestamp in the definition below, in order to implement the natural chronological ordering of events.
+Commands generate events by means of a *command processor* (see below). As is the case with commands, events reference a certain entity and thus bear an entity identifier. We also include a timestamp in the definition below, in order to represent the intrinsic chronological ordering of events.
 
 ```scala
 trait EntityEvent[ID] {  
@@ -55,7 +55,7 @@ trait EntityEvent[ID] {
 ``` 
 
 ### Command processor
-As mentioned above, command processing designates creation of one or several events from a command. We define a dedicated single-function trait for this aspect:
+As mentioned above, command processing is about creation of one or several events to carry out the command. We define a dedicated single-function trait for this aspect:
   
 ```scala
 trait CommandProcessor[S, C[R] <: EntityCommand[_, _, R], E <: EntityEvent[_]] {  
@@ -506,7 +506,7 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ3MTY2Mjc3MywxNDM3NDQ5MDQ5LDE0MT
+eyJoaXN0b3J5IjpbLTgzNDUyMDc0NywxNDM3NDQ5MDQ5LDE0MT
 A1ODYxMDMsLTQzMzQ3NzEzNCw2MzI1NDIwNSwtMzkwNTUwNTAy
 LDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
 YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
