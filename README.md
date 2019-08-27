@@ -488,8 +488,8 @@ class TypedActorRideRepository()(
 }
 ```
 ## Command Flow
-Let's make this a bit more concrete by previewing how the flow for the `bookRide` command will unfold when mapping these definitions with Akka Persistence:
- 1. Akka Cluster Sharding extension attempts resolving an actor reference for the specified `rideID`.
+Let's make this a bit more concrete by previewing how the flow for the `bookRide` command will unfold when calling `bookRide` on the repository:
+ 1. Akka Cluster Sharding extension attempts to resolve an actor reference for the specified `rideID`.
  2. Since none already exists in the cluster, entity actor is created on some node and fed with the initial `BookRide` command.
  3. `initialCommandProcessor` is invoked, generating a `RideBooked` event.
  4.  `BookRide.uninitializedReply` function is called, leading to the `RideAccepted`  reply. 
@@ -498,7 +498,7 @@ Let's make this a bit more concrete by previewing how the flow for the `bookRide
 
 Note that command processing and event application proceeds strictly sequentially: the actor processes the command, stores the events, replies to the sender, applies the event leading to new state, then processes the next command and so on. This makes for comprehensible state machine descriptions. Rather than leading to a complicated program flow, asynchronicity is harnessed by the inherent distributive nature of domain entities. 
 
-This concludes our implementation tour. Journal and event adapter configuration aside, we now have a fully functional repository for rides!
+This concludes our implementation tour. Event journal and adapter configuration aside, we now have a fully functional repository for rides!
 
 ## DDD :heart: actor model
 Although very simplified, this example illustrates the "good fit" of the actor model to domain-driven-design: aggregates are represented by entities with well defined sequential state transitions and a command and event "language" to represent actions and facts.
@@ -507,9 +507,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxMzI1NTM5OCwxNjM4MTMxMzAzLDE0Mz
-c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
-LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
-c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
-LTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbMzExMDMwNjEzLDE2MzgxMzEzMDMsMTQzNz
+Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
+LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
+k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
+MTg2NTU0Mjk4Ml19
 -->
