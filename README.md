@@ -505,11 +505,12 @@ This concludes our implementation tour. Event journal and adapter configuration 
 ## DDD :heart: actor model
 Although very simplified, this example illustrates the "good fit" of the actor model to domain-driven-design: aggregates are represented by entities with well defined sequential state transitions and a command and event "language" to represent actions and facts.
 We have shown an approach to describe event sourced entities in the domain using such an abstract language, and the required infrastructure plumbing code to map these pure definitions to an Akka Persistence Typed implementation.
-Supporting code for this article can be found in its entirety [here](https://github.com/jchapuis/akka-persistent-entity), and feel free to reach out to the authors for more information.  
+
+Supporting code for this article can be found in its entirety [here](https://github.com/jchapuis/akka-persistent-entity). We hope this was useful and would love you feedback! Feel free to reach out to the authors for more information.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUxODY3ODg3MSwyMTE5MzgxMDQyLDE2Mz
-gxMzEzMDMsMTQzNzQ0OTA0OSwxNDEwNTg2MTAzLC00MzM0Nzcx
-MzQsNjMyNTQyMDUsLTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MT
-gwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OTQ3Nzcz
-LDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbMzI1OTcwODI2LDIxMTkzODEwNDIsMTYzOD
+EzMTMwMywxNDM3NDQ5MDQ5LDE0MTA1ODYxMDMsLTQzMzQ3NzEz
+NCw2MzI1NDIwNSwtMzkwNTUwNTAyLDE0MTEyMTUyMjAsLTUxOD
+AyODQ4MSwtNDU3OTU3NDE2LDQxODYzNTA4MywtOTk5NDc3NzMs
+NDg0Nzk5MzQ1LC0xODY1NTQyOTgyXX0=
 -->
