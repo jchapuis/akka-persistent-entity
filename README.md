@@ -286,7 +286,7 @@ implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>
 }
 ``` 
 ### Ride repository
-In Domain-drive  concept of repository can be traditionally captured in the domain by a trait, nothing special here. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
+In domain-driven design, the concept of repository can be traditionally captured in the domain by a trait, nothing special here. Here's an example definition for our `RideRepository`, defined in *tagless-final* style:  
 ```scala
 trait RideRepository[F[_]] {  
   def bookRide(rideID: Ride.ID, origin: Address, destination: Address, pickupTime: Instant): F[BookReply]  
@@ -509,9 +509,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTg0MTM4MjU3LDE2MzgxMzEzMDMsMTQzNz
-Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
-LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
-k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
-MTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTIwMDE4NTc2MjgsMTYzODEzMTMwMywxND
+M3NDQ5MDQ5LDE0MTA1ODYxMDMsLTQzMzQ3NzEzNCw2MzI1NDIw
+NSwtMzkwNTUwNTAyLDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtND
+U3OTU3NDE2LDQxODYzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1
+LC0xODY1NTQyOTgyXX0=
 -->
