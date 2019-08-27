@@ -432,7 +432,7 @@ object RidePersistentEntity {
 }
 ```
 Definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
-The only significant logic here is additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of available tweaking options, e.g. [install an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
+The only significant logic here is the additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of tweaking options, e.g. to [install an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
 
 ###  TypedActorEntityRepository
 As mentioned earlier, the repository is implemented by sending commands an decoding replies. Here's the trait definition:
@@ -504,14 +504,12 @@ This concludes our implementation tour. Event journal and adapter configuration 
 
 ## DDD :heart: actor model
 Although very simplified, this example illustrates the "good fit" of the actor model to domain-driven-design: aggregates are represented by entities with well defined sequential state transitions and a command and event "language" to represent actions and facts.
-We have shown how to describe event sourced entities in the domain using this abstract language, and the required infrastructure plumbing code to map these pure definitions to an Akka Persistence Typed implementation.
+We have shown an approach to describe event sourced entities in the domain using such an abstract language, and the required infrastructure plumbing code to map these pure definitions to an Akka Persistence Typed implementation.
 Supporting code for this article can be found in its entirety [here](https://github.com/jchapuis/akka-persistent-entity), and feel free to reach out to the authors for more information.  
-
-*Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjExOTM4MTA0MiwxNjM4MTMxMzAzLDE0Mz
-c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
-LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
-c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
-LTE4NjU1NDI5ODJdfQ==
+eyJoaXN0b3J5IjpbMTUxODY3ODg3MSwyMTE5MzgxMDQyLDE2Mz
+gxMzEzMDMsMTQzNzQ0OTA0OSwxNDEwNTg2MTAzLC00MzM0Nzcx
+MzQsNjMyNTQyMDUsLTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MT
+gwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OTQ3Nzcz
+LDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
 -->
