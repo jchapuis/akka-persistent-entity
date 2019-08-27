@@ -21,7 +21,7 @@ As mentioned above, event sourcing revolves around three main [concepts](https:/
 Let's go ahead and capture these concepts in Scala:
 
 ### Command
-A command is directed to a specific entity, and thus bears a target entity ID. Along with command data, we need to define what to reply to the command emitter. Formulating the reply need to be quick, so that the system stays responsive. Reply formulation typically consist in validation code leading to either acceptation or rejection of the command. 
+A command is directed to a specific entity, and thus bears a target entity ID. Along with command data, it defines the reply to the command emitter. Formulating the reply needs to be quick so that the system stays responsive. Reply formulation typically consist in validation code leading to either acceptation or rejection of the command. 
 
 Two cases can arise when receiving a command: the entity already exists, or it's the first time we're getting a command for that ID. Purely introspective commands need to be supported in this model as well, allowing state inspection. For such read-only commands, the command typically doesn't entail any event and the reply consists of some element of current entity state.
 
@@ -506,8 +506,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQzNzQ0OTA0OSwxNDEwNTg2MTAzLC00Mz
-M0NzcxMzQsNjMyNTQyMDUsLTM5MDU1MDUwMiwxNDExMjE1MjIw
-LC01MTgwMjg0ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OT
-Q3NzczLDQ4NDc5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTMzODA0MDM5LDE0Mzc0NDkwNDksMTQxMD
+U4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1LC0zOTA1NTA1MDIs
+MTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NTc5NTc0MTYsNDE4Nj
+M1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUsLTE4NjU1NDI5ODJd
+fQ==
 -->
