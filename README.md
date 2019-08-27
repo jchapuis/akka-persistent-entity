@@ -66,8 +66,8 @@ trait CommandProcessor[S, C[R] <: EntityCommand[_, _, R], E <: EntityEvent[_]] {
 The type parameters are:
 
 - `S`: the entity state
-- `C`: the command type. It has the constraint `<: EntityCommand[_, _, R]`,  representing the fact that it is an entity command. We add a `R`  type parameter to `C` itself representing the reply, which will help us with implementation with Akka Typed.
--  `E`: the event type, with the constraint `<: EntityEvent[_]]`
+- `C`: the command type. It has the constraint `<: EntityCommand[_, _, R]`,  representing the fact that it is an entity command. We add a `R`  type parameter to `C` itself representing the reply, which will help us when wiring this with Akka Typed.
+-  `E`: the event type, with the constraint `<: EntityEvent[_]`
 
 #### Initial command processor
 Obviously, when the entity hasn't been created yet (before the first command), the command processor has no entity state to work with. In order to allow for a clear distinction of this initial scenario, we define a slightly different trait, which makes no mention of entity state:
@@ -79,7 +79,7 @@ trait InitialCommandProcessor[C[R] <: EntityCommand[_, _, R], E <: EntityEvent[_
 ```
 
 ### Event applier
-Similarly, we define traits for event application. When the entity exists, this is a function of two parameters: the current state and the event, leading to a new version of the state:
+Similarly, we define traits for event handling. This is a function of two parameters: the current state and the event, leading to a new version of the state:
 
 ```scala
 trait EventApplier[S, E <: EntityEvent[_]] {  
@@ -103,7 +103,7 @@ trait InitialEventApplier[E <: EntityEvent[_], S] {
 
 ## Example: "Ride" entity
 
-Let's now put these definitions in practice with an example entity themed in the mobility space: `Ride`. This entity represents an imaginary booking for a vehicle ride. Once created, some vehicle from the fleet must be assigned to carry the passenger. Once assigned and in position, the vehicle picks the passenger, at which point the ride starts. When the passenger is finally dropped off, the ride completes. 
+Let's now put these definitions in practice with an example entity themed in the mobility space: `Ride`. This entity represents an imaginary booking for a vehicle ride. After ride creation, some vehicle from the fleet must be assigned to carry the passenger. Once assigned and in position, the vehicle picks the passenger, at which point the ride starts. When the passenger is finally dropped off, the ride completes. 
 
 ### Ride entity state
 We start by defining the entity state with a plain case class (we are omitting some types for simplicity):
@@ -506,7 +506,7 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgzNDUyMDc0NywxNDM3NDQ5MDQ5LDE0MT
+eyJoaXN0b3J5IjpbMTYzODEzMTMwMywxNDM3NDQ5MDQ5LDE0MT
 A1ODYxMDMsLTQzMzQ3NzEzNCw2MzI1NDIwNSwtMzkwNTUwNTAy
 LDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
 YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
