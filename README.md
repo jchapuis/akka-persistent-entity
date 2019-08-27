@@ -145,13 +145,13 @@ case class BookRide(entityID: Ride.ID, origin: Address, destination: Address, pi
   def uninitializedReply: BookReply = RideAccepted(entityID)  
 }
 ```
-Possible replies are:
+As can be seen above, possible replies are:
 ```scala
 sealed trait BookReply  
 case class RideAccepted(rideID: Ride.ID) extends BookReply  
 case class RideAlreadyExists(rideID: Ride.ID) extends BookReply
 ```
-And the generated persistent event will be:
+The generated event will be:
 ```scala
 case class RideBooked(entityID: Ride.ID,  
   timestamp: Instant,  
@@ -191,16 +191,6 @@ object Ride {
   // ... 
 }
 ```
-##### Command Flow
-Let's jump ahead a little and make this more concrete by previewing how the flow for this command will unfold when mapping these definitions with Akka Persistence:
- 1. Akka Cluster Sharding extension attempts resolving an actor reference for the specified `rideID`.
- 2. Since none already exists in the cluster, entity actor is created on some node and fed with the initial `BookRide` command.
- 3. `initialCommandProcessor` is invoked, generating a `RideBooked` event.
- 4.  `BookRide.uninitializedReply` function is called, leading to the `RideAccepted`  reply. 
- 5. The event is picked up and `initialEventApplier` initialises entity state with it. 
- 6. The entity is now ready to receive subsequent commands, which will be processed with `commandProcessor` and whose events will be handled using `eventApplier`.  
-
-Note that command processing and event application proceeds strictly sequentially: the actor processes the command, stores the events, replies to the sender, applies the event leading to new state, then processes the next command and so on. This makes for comprehensible state machine descriptions. Rather than with complicated program flow, asynchronicity is harnessed by the inherent distributive nature of domain entities. 
 
 #### AssignVehicle command
 Once the booking is created, we need to select a vehicle to service the ride. For the sake of simplicity in this article we're going to grossly gloss that over, but one can imagine a sophisticated algorithm which would select the optimal vehicle according to a set of criteria. This algorithm could be monitoring `RideBooked` events from the Akka event journal to launch an optimization asynchronously, and send a command back to the ride entity once a vehicle has been matched (note that event projections can also be abstracted in the domain, this could be the topic of a subsequent article).
@@ -497,6 +487,17 @@ class TypedActorRideRepository()(
   def completeRide(rideID: ID): Future[RideCommand.CompleteRideReply] = sendCommand(CompleteRide(rideID))
 }
 ```
+## Command Flow
+Let's make this more concrete by previewing how the flow for this command will unfold when mapping these definitions with Akka Persistence:
+ 1. Akka Cluster Sharding extension attempts resolving an actor reference for the specified `rideID`.
+ 2. Since none already exists in the cluster, entity actor is created on some node and fed with the initial `BookRide` command.
+ 3. `initialCommandProcessor` is invoked, generating a `RideBooked` event.
+ 4.  `BookRide.uninitializedReply` function is called, leading to the `RideAccepted`  reply. 
+ 5. The event is picked up and `initialEventApplier` initialises entity state with it. 
+ 6. The entity is now ready to receive subsequent commands, which will be processed with `commandProcessor` and whose events will be handled using `eventApplier`.  
+
+Note that command processing and event application proceeds strictly sequentially: the actor processes the command, stores the events, replies to the sender, applies the event leading to new state, then processes the next command and so on. This makes for comprehensible state machine descriptions. Rather than with complicated program flow, asynchronicity is harnessed by the inherent distributive nature of domain entities. 
+
 This concludes our implementation tour. Journal and event adapter configuration aside, we now have a fully functional repository for rides!
 
 ## DDD :heart: actor model
@@ -506,9 +507,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYzODEzMTMwMywxNDM3NDQ5MDQ5LDE0MT
-A1ODYxMDMsLTQzMzQ3NzEzNCw2MzI1NDIwNSwtMzkwNTUwNTAy
-LDE0MTEyMTUyMjAsLTUxODAyODQ4MSwtNDU3OTU3NDE2LDQxOD
-YzNTA4MywtOTk5NDc3NzMsNDg0Nzk5MzQ1LC0xODY1NTQyOTgy
-XX0=
+eyJoaXN0b3J5IjpbLTI0MDYxMTUxMiwxNjM4MTMxMzAzLDE0Mz
+c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
+LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
+c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
+LTE4NjU1NDI5ODJdfQ==
 -->
