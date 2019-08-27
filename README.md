@@ -308,12 +308,12 @@ Thanks to abstraction and separation of concerns, our commands and events logic 
 Let's take a plunge now and dive into the *infrastructure* layer. This is where we'll wire our abstractions with Akka. Thanks to the expressiveness of Akka Persistence Typed API, this mapping is surprisingly short, albeit a bit complicated on the typing side.     
 
 ### PersistentEntity
-The bulk of the code is in an abstract `PersistentEntity` class, which exposes a `eventSourcedEntity(id: String): EventSourcedBehavior` public function. This will be used by the repository implementation. This class is typed like so:
+The bulk of the code is in an abstract `PersistentEntity` class, which exposes a `eventSourcedEntity(id: String): EventSourcedBehavior` public function. This will be used by the repository implementation as the actor behavior. This class is typed like so:
 ```scala
 abstract class PersistentEntity[ID, InnerState, C[R] <: EntityCommand[ID, InnerState, R], E <: EntityEvent[ID]]
 ```
   - `ID`: entity ID
-  - `InnerState`: entity state - we call this *inner* because the actual entity state is a sealed trait acting basically like `Option[InnerState]` since before the first event the entity is empty
+  - `InnerState`: entity state - we call this *inner* because the actual entity state is a sealed trait, acting basically like `Option[InnerState]` (since before the first event the entity is empty)
   - `C`: command type, with corresponding type constraint
   - `E`: event type, also with relevant type constraint
 
@@ -431,7 +431,7 @@ object RidePersistentEntity {
   ): RidePersistentEntity = new RidePersistentEntity
 }
 ```
-Notice how definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
+Definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
 The only significant logic here is additional persistent behaviour configuration in `configureEntityBehavior`. This lets us take advantage of available tweaking options, e.g. [install an event adapter](https://doc.akka.io/docs/akka/current/typed/persistence.html#event-adapters), define event tags, etc.
 
 ###  TypedActorEntityRepository
@@ -509,9 +509,9 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzcwNTI2NzE5LDE2MzgxMzEzMDMsMTQzNz
-Q0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNjMyNTQyMDUs
-LTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0ODEsLTQ1Nz
-k1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4NDc5OTM0NSwt
-MTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbMjExOTM4MTA0MiwxNjM4MTMxMzAzLDE0Mz
+c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
+LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
+c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
+LTE4NjU1NDI5ODJdfQ==
 -->
