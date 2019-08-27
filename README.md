@@ -488,7 +488,7 @@ class TypedActorRideRepository()(
 }
 ```
 ## Command Flow
-Let's make this more concrete by previewing how the flow for this command will unfold when mapping these definitions with Akka Persistence:
+Let's make this a bit more concrete by previewing how the flow for the `bookRide` command will unfold when mapping these definitions with Akka Persistence:
  1. Akka Cluster Sharding extension attempts resolving an actor reference for the specified `rideID`.
  2. Since none already exists in the cluster, entity actor is created on some node and fed with the initial `BookRide` command.
  3. `initialCommandProcessor` is invoked, generating a `RideBooked` event.
@@ -496,7 +496,7 @@ Let's make this more concrete by previewing how the flow for this command will u
  5. The event is picked up and `initialEventApplier` initialises entity state with it. 
  6. The entity is now ready to receive subsequent commands, which will be processed with `commandProcessor` and whose events will be handled using `eventApplier`.  
 
-Note that command processing and event application proceeds strictly sequentially: the actor processes the command, stores the events, replies to the sender, applies the event leading to new state, then processes the next command and so on. This makes for comprehensible state machine descriptions. Rather than with complicated program flow, asynchronicity is harnessed by the inherent distributive nature of domain entities. 
+Note that command processing and event application proceeds strictly sequentially: the actor processes the command, stores the events, replies to the sender, applies the event leading to new state, then processes the next command and so on. This makes for comprehensible state machine descriptions. Rather than leading to a complicated program flow, asynchronicity is harnessed by the inherent distributive nature of domain entities. 
 
 This concludes our implementation tour. Journal and event adapter configuration aside, we now have a fully functional repository for rides!
 
@@ -507,7 +507,7 @@ Supporting code for this article can be found in its entirety [here](https://git
 
 *Mention persistence (what's missing from the picture)*
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI0MDYxMTUxMiwxNjM4MTMxMzAzLDE0Mz
+eyJoaXN0b3J5IjpbLTUxMzI1NTM5OCwxNjM4MTMxMzAzLDE0Mz
 c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
 LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
 c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDUs
