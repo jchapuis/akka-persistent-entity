@@ -45,19 +45,27 @@ object Ride {
 
   implicit def commandProcessor(
     implicit timestampProvider: TimestampProvider
-  ): CommandProcessor[Ride, RideCommand, RideEvent] = (_, command) => command match {
-    case AssignVehicle(rideID, vehicleID) => List(VehicleAssigned(rideID, timestampProvider.timestamp, vehicleID))
-    case StartRide(rideID)                => List(RideStarted(rideID, timestampProvider.timestamp))
-    case CompleteRide(rideID)             => List(RideCompleted(rideID, timestampProvider.timestamp))
-    case _: RideBooked                    => Nil
-  }
+  ): CommandProcessor[Ride, RideCommand, RideEvent] =
+    (state, command) =>
+      command match {
+        case AssignVehicle(rideID, vehicleID) =>
+          if (state.vehicle.nonEmpty) {
+            Logger.error(s"Vehicle already assigned for ride $rideID")
+            Nil
+          } else List(VehicleAssigned(rideID, timestampProvider.timestamp, vehicleID))
+        case StartRide(rideID)    => List(RideStarted(rideID, timestampProvider.timestamp))
+        case CompleteRide(rideID) => List(RideCompleted(rideID, timestampProvider.timestamp))
+        case _: RideBooked        => Nil
+    }
 
   implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>
     event match {
-      case VehicleAssigned(_, _, vehicleID) => ride.copy(vehicle = Some(vehicleID), status = Assigned)
+      case VehicleAssigned(_, _, vehicleID) => ride.copy(vehicle = Option(vehicleID), status = Assigned)
       case RideStarted(_, _)                => ride.copy(status = Started)
       case RideCompleted(_, _)              => ride.copy(status = Completed)
-      case _: RideBooked                    => ride
+      case _: RideBooked =>
+        Logger.error(s"Ride ${ride.id} already booked")
+        ride
   }
 
 }

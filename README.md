@@ -185,7 +185,9 @@ object Ride {
 
   implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>
     event match {
-      case _: RideBooked => ride
+      case _: RideBooked => 
+	      logError(s"Ride ${ride.id} already booked")
+	      ride
   }
 
   // ... 
@@ -213,18 +215,24 @@ And the corresponding event :
 ```scala
 case class VehicleAssigned(entityID: Ride.ID, timestamp: Instant, vehicleID: Vehicle.ID) extends RideEvent
 ```
-Below the command processor as well as event applier, which simply sets the `vehicle` field:
+The command processor creates the event. Since we reject commands whenever the vehicle has already been assigned, this case should not arise here so we log that as an error:
 ```scala
 implicit def commandProcessor(  
   implicit timestampProvider: TimestampProvider  
-): CommandProcessor[Ride, RideCommand, RideEvent] = (_, command) => command match {  
-  case AssignVehicle(rideID, vehicleID) => List(VehicleAssigned(rideID, timestampProvider.timestamp, vehicleID))  
+): CommandProcessor[Ride, RideCommand, RideEvent] = (state, command) => command match {  
+  case AssignVehicle(rideID, vehicleID) => 
+	  if (state.vehicle.nonEmpty) {  
+		  Logger.error(s"Vehicle already assigned for ride $rideID")  
+		  Nil  
+	  } else List(VehicleAssigned(rideID, timestampProvider.timestamp, vehicleID))  
   case _: RideBooked => Nil  
 }  
-  
+```
+The event applier simply sets the `vehicle` field:
+```scala  
 implicit val eventApplier: EventApplier[Ride, RideEvent] = (ride, event) =>  
   event match {  
-  case VehicleAssigned(_, _, vehicleID) => ride.copy(vehicle = Some(vehicleID), status = Assigned)  
+  case VehicleAssigned(_, _, vehicleID) => ride.copy(vehicle = Option(vehicleID), status = Assigned)  
   case _: RideBooked => ride  
 }
 ```
@@ -396,7 +404,7 @@ Notice how we left `protected  def configureEntityBehavior()` open for extension
 Defining the persistent entity behavior is now easily done by extending `PersistentEntity`. This is were everything comes together:
 ```scala
 sealed class RidePersistentEntity()(implicit timestampProvider: TimestampProvider)
-  extends PersistentEntity[Ride.ID, Ride, RideCommand, RideEvent]("ride") {
+  extends PersistentEntity[Ride.ID, Ride, RideCommand, RideEvent](RidePersistentEntity.entityName) {
   def entityIDFromString(id: String): Ride.ID = UUID.fromString(id)
   def entityIDToString(id: Ride.ID): String   = id.toString
 
@@ -425,10 +433,8 @@ sealed class RidePersistentEntity()(implicit timestampProvider: TimestampProvide
 }
 
 object RidePersistentEntity {
-  def apply()(
-    implicit
-    timestampProvider: TimestampProvider
-  ): RidePersistentEntity = new RidePersistentEntity
+  def apply()(implicit timestampProvider: TimestampProvider): RidePersistentEntity = new RidePersistentEntity
+  val entityName = "ride"
 }
 ```
 Definitions for implicit parameters `initialProcessor`, `processor`, `initialApplier`, `applier` are picked up automatically from `Ride` companion object, which is why we had published them in implicit scope earlier.
@@ -508,10 +514,11 @@ We have shown an approach to describe event-sourced entities in the domain using
 
 Supporting code for this article can be found in its entirety [here](https://github.com/jchapuis/akka-persistent-entity). We hope this was useful and would love your feedback! Feel free to reach out to the authors for more information.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MDQwMDM2MCwtMTQyMTA5MzczNiwtMz
-gxNDE0ODkzLDMyNTk3MDgyNiwyMTE5MzgxMDQyLDE2MzgxMzEz
-MDMsMTQzNzQ0OTA0OSwxNDEwNTg2MTAzLC00MzM0NzcxMzQsNj
-MyNTQyMDUsLTM5MDU1MDUwMiwxNDExMjE1MjIwLC01MTgwMjg0
-ODEsLTQ1Nzk1NzQxNiw0MTg2MzUwODMsLTk5OTQ3NzczLDQ4ND
-c5OTM0NSwtMTg2NTU0Mjk4Ml19
+eyJoaXN0b3J5IjpbLTkwNjg3NzI5NiwxMjExODg4ODgyLDM3Nj
+I3MDIyLC0xNjA0MDAzNjAsLTE0MjEwOTM3MzYsLTM4MTQxNDg5
+MywzMjU5NzA4MjYsMjExOTM4MTA0MiwxNjM4MTMxMzAzLDE0Mz
+c0NDkwNDksMTQxMDU4NjEwMywtNDMzNDc3MTM0LDYzMjU0MjA1
+LC0zOTA1NTA1MDIsMTQxMTIxNTIyMCwtNTE4MDI4NDgxLC00NT
+c5NTc0MTYsNDE4NjM1MDgzLC05OTk0Nzc3Myw0ODQ3OTkzNDVd
+fQ==
 -->
