@@ -1,5 +1,6 @@
 
 # Domain-driven event sourcing with Akka Typed
+
 ![enter image description here](https://mdaltd.ca/wp-content/uploads/2017/08/Abrasive-Wear-300x225.jpg)
 When following a domain-driven design approach, it is considered good practice to have the domain code at the core of the application, self-contained and with no dependencies on platform-specific aspects ([onion](https://www.infoq.com/news/2014/10/ddd-onion-architecture/) architecture). Domain code is as business-centric as possible, maximizing the ratio of business logic versus "plumbing" code. This makes business logic expressive and resilient to changes.
 
